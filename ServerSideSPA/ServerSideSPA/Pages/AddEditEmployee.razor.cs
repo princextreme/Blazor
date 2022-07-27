@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ServerSideSPA.Data;
 using ServerSideSPA.Models;
-
 namespace ServerSideSPA.Pages
 {
     public class AddEditEmployeeModel : ComponentBase
     {
-
+        
         [Inject]
         protected EmployeeService EmployeeService { get; set; }
         [Inject]
@@ -39,6 +38,8 @@ namespace ServerSideSPA.Pages
 
         protected async Task SaveEmployee()
         {
+            
+
             if (emp.EmployeeId != 0)
             {
                 await Task.Run(() =>
