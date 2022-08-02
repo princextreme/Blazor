@@ -40,7 +40,30 @@ namespace ServerSideSPA.DataAccess
                 throw;
             }
         }
-
+        public void AddDailyWork(DailyWork dailyWork)
+        {
+            try
+            {
+                db.DailyWorks.Add(dailyWork);
+                db.SaveChanges();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+   public void AddSubCategory(SubCategory subCategory)
+        {
+            try
+            {
+                db.SubCategories.Add(subCategory);
+                db.SaveChanges();
+            }
+            catch
+            {
+                throw;
+            }
+        }
         //To Update the records of a particluar employee      
         public void UpdateEmployee(Employee employee)
         {
@@ -103,6 +126,18 @@ namespace ServerSideSPA.DataAccess
             try
             {
                 return db.Cities.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public List<DailyWork> GetAllWorks()
+        {
+            try
+            {
+                return db.DailyWorks.AsNoTracking().ToList();
             }
             catch
             {

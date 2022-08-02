@@ -16,10 +16,22 @@ namespace ServerSideSPA.Data
         {
             return Task.FromResult(objemployee.GetAllEmployees());
         }
+        public Task<List<DailyWork>> GetWorks()
+        {
+            return Task.FromResult(objemployee.GetAllWorks());
+        }
 
         public void Create(Employee employee)
         {
             objemployee.AddEmployee(employee);
+        }
+        public void CreateWork(DailyWork dailyWork )
+        {
+            objemployee.AddDailyWork(dailyWork);
+        }
+        public void CreateSubCategory(SubCategory subCategory)
+        {
+            objemployee.AddSubCategory(subCategory);
         }
         public Task<Employee> Details(int id)
         {

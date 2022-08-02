@@ -1,0 +1,124 @@
+﻿<h3>SubCategory</h3>
+
+@page "/SubCategory"
+@page "/SubCategory/add"
+@page "/SubCategory/edit/{SubId:int}"
+@using ServerSideSPA.Models;
+@using ServerSideSPA.Data;
+@inject NavigationManager NavigationManager
+@inject EmployeeService EmployeeService
+@inject NavigationManager UrlNavigationManager
+<h1>@Title Work</h1>
+<hr />
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddWorkModal">
+    Add New Daily Work
+</button>
+
+
+@if (sCatList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @if (sCatList.Count > 0)
+    {
+
+
+        <table class="table table-striped align-middle table-bordered">
+            <thead class="table-success">
+                <tr class="text-center"> 
+                    <th>SubCategoryTitle</th> 
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var work in sCatList)
+                {
+                    <tr class="text-center"> 
+                        <td>@work.SubCategoryTitle</td> 
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    }
+    else
+    {
+        <div class="d-flex justify-content-center">
+            <h4>No record found</h4>
+        </div>
+    }
+}
+<div class="modal fade" id="AddWorkModal" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Work</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <EditForm Model="@SubCategory" OnValidSubmit="SaveDailyWork">
+                    <DataAnnotationsValidator />
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">SubCategoryTitle</label>
+                        <div class="col-md-4">
+                            <InputText class="form-control" @bind-Value="SubCategory.SubCategoryTitle" />
+                        </div>
+                    </div>
+                    <ValidationMessage For="@(() => SubCategory.SubCategoryTitle)" />
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-light" @onclick="Cancel">Cancel</button>
+                    </div>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+
+                <button class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+
+
+    [Parameter]
+    public int WorkId { get; set; }
+    [Parameter]
+    public int SubId { get; set; }
+
+    protected string Title = "Add";
+
+    public SubCategory subCategory = new();
+
+    protected async Task SaveDailyWork()
+    {
+
+
+        await Task.Run(async () =>
+        {
+            EmployeeService.CreateSubCategory(subCategory);
+        });
+        await GetAllWorks();
+        UrlNavigationManager.NavigateTo("/DailyWork/add");
+        //       await Task.WhenAll(new Task[] {
+        //    Task.Run(() =>  EmployeeService.CreateWork(work);),
+        //    Task.Run(() => GetAllWorks();)
+        //});
+    }
+    public void Cancel()
+    {
+        UrlNavigationManager.NavigateTo("/DailyWork");
+    }
+    protected List<SubCategory> sCatList = new();
+    protected List<SubCategory> searchEmpData = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllWorks();
+    }
+   
+}
